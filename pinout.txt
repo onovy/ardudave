@@ -1,0 +1,9 @@
+* = PWM
+
+LED: *3, *5, *6, *11, 7, 12
+RGB: *9, *10, *13
+piezo: 8
+button: 0, 1, 2, 4
+switch: A2, A4, A3
+potentiometer: A0, A1
+out: A5
