@@ -1,4 +1,4 @@
-# ardudave
+# ArduDave
 
 Arduino based toy for my son David.
 
