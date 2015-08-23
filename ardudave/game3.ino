@@ -22,6 +22,7 @@ void game3(unsigned long time) {
       if (melodyPos > melodyLen) {
         melody = 0;
         noTone(pinPiezo);
+        TCCR3A = (1 << WGM30);
       } else {
         noTone(pinPiezo);
         delay(delayLength / 3);
