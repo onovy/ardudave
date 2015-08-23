@@ -1,7 +1,21 @@
 #include "pitches.h"
 #include "pins.h"
+#include <EEPROM.h>
+
+byte game;
+void eepromSaveGame(byte game) {
+  Serial.println("EEPROM write");
+  
+  EEPROM.write(0, game);
+}
+
+byte eepromLoadGame() {
+  return EEPROM.read(0);
+}
 
 void setup() {
+  Serial.begin(9600); 
+
   pinMode(pinLed1, OUTPUT);
   pinMode(pinLed2, OUTPUT);
   pinMode(pinLed3, OUTPUT);
@@ -17,104 +31,136 @@ void setup() {
   pinMode(pinButtonG, INPUT_PULLUP);
   pinMode(pinButtonR, INPUT_PULLUP);
   pinMode(pinSwitchY, INPUT_PULLUP);
-  pinMode(pinSwitch2, INPUT_PULLUP);
+  pinMode(pinSwitchR, INPUT_PULLUP);
   pinMode(pinSwitch3, INPUT_PULLUP);
-  pinMode(pinPoten1, INPUT);
-  pinMode(pinPoten2, INPUT);
+  pinMode(pinPotenU, INPUT);
+  pinMode(pinPotenL, INPUT);
   pinMode(pinIO, INPUT);
+
+  game = eepromLoadGame();
+  indicateGame(game);
 }
 
-int fadeValue = 0;
-int fadeStep = 1;
-int fadeMax = 10;
-bool music = false;
+void reset() {
+  digitalWrite(pinLed1, LOW);
+  digitalWrite(pinLed2, LOW);
+  digitalWrite(pinLed3, LOW);
+  digitalWrite(pinLed4, LOW);
+  digitalWrite(pinLed5, LOW);
+  digitalWrite(pinLed6, LOW);
+  digitalWrite(pinLedRgbR, LOW);
+  digitalWrite(pinLedRgbG, LOW);
+  digitalWrite(pinLedRgbB, LOW);
+  noTone(pinPiezo);
+}
 
-void loop() {
-   fadeValue += fadeStep;
+void debug() {
+  Serial.println("---------");
+
+  Serial.print("ButtonR: ");
+  Serial.println(digitalRead(pinButtonR));
+
+  Serial.print("ButtonG: ");
+  Serial.println(digitalRead(pinButtonG));
+
+  Serial.print("ButtonB: ");
+  Serial.println(digitalRead(pinButtonB));
+
+  Serial.print("ButtonW: ");
+  Serial.println(digitalRead(pinButtonW));
+
+  Serial.print("Switch3: ");
+  Serial.println(digitalRead(pinSwitch3));
+
+  Serial.print("SwitchY: ");
+  Serial.println(digitalRead(pinSwitchY));
+
+  Serial.print("SwitchR: ");
+  Serial.println(digitalRead(pinSwitchR));
+
+  Serial.print("PotenU: ");
+  Serial.println(analogRead(pinPotenU));
+
+  Serial.print("PotenL: ");
+  Serial.println(analogRead(pinPotenL));
+}
+
+void indicateGame(byte game) {
+  reset();
   
-    if (fadeValue >= fadeMax || fadeValue <= 0) {
-        fadeStep = -fadeStep;
+  switch (game) {
+    case 1:
+      digitalWrite(pinLed1, HIGH);
+    break;
+    case 2:
+      digitalWrite(pinLed2, HIGH);
+    break;
+    case 3:
+      digitalWrite(pinLed3, HIGH);
+    break;
+    case 4:
+      digitalWrite(pinLed4, HIGH);
+    break;
+    case 5:
+      digitalWrite(pinLed5, HIGH);
+    break;
+    case 6:
+      digitalWrite(pinLed6, HIGH);
+    break;
+    case 7:
+      digitalWrite(pinLedRgbR, HIGH);
+      digitalWrite(pinLedRgbG, HIGH);
+      digitalWrite(pinLedRgbB, HIGH);
+    break;
+  }
+
+  delay(500);
+
+  reset();
+}
+
+unsigned long holdingFrom = 0;
+byte games = 4;
+void loop() {
+  // debug();
+  unsigned long time = millis();
+
+  // Red and white button pressed together -> change game
+  if (digitalRead(pinButtonR) == LOW && digitalRead(pinButtonW) == LOW) {
+    if (!holdingFrom) {
+      holdingFrom = time;
+    }
+    if (time - holdingFrom > 1000) {
+      game++;
+      if (game > games) {
+        game = 1;
+      }
+      eepromSaveGame(game);
+      indicateGame(game);
+      holdingFrom = time;
     }
 
-    if (!music) {
-    analogWrite(pinLed1, fadeValue); // green
-    analogWrite(pinLed2, fadeMax - fadeValue); // red
-    analogWrite(pinLed3, fadeValue); // blue
-    analogWrite(pinLed4, fadeMax - fadeValue); // yellow
-    analogWrite(pinLed5, fadeValue);
-    analogWrite(pinLed6, fadeMax - fadeValue);
-    } else {
-      digitalWrite(pinLed1, 1);
-      digitalWrite(pinLed2, 1);
-      digitalWrite(pinLed3, 1);
-      digitalWrite(pinLed4, 1);
-      digitalWrite(pinLed5, 1);
-      digitalWrite(pinLed6, 1);
-    }
+    return;
+  } else {
+    holdingFrom = 0;
+  }
 
-    int color = analogRead(pinPoten1);
-    int brig = analogRead(pinPoten2);
-    brig = 512;
-
-    long colorR = color & (B111 << 7) >> 2;
-    long colorG = color & (B1111 << 3) << 1;
-    long colorB = color & B111 << 5;
-
-    colorR = colorR * brig / 1024;
-    colorG = colorG * brig / 1024;
-    colorB = colorB * brig / 1024;
-
-    colorR = 128;
-    colorG = 64;
-    colorB = 64;
-
-    analogWrite(pinLedRgbR, fadeValue);
-    analogWrite(pinLedRgbG, fadeMax - fadeValue);
-    analogWrite(pinLedRgbB, fadeValue);
-
-    if (digitalRead(pinButtonB) == LOW or true) {
-      if (!music) {
-        tone(pinPiezo, NOTE_D3);
-        music = true;
-      }
-    } else if (digitalRead(pinButtonW) == LOW) {
-      if (!music) {
-        tone(pinPiezo, NOTE_D3);
-        music = true;
-      }
-    } else if (digitalRead(pinButtonG) == LOW) {
-      if (!music) {
-        tone(pinPiezo, NOTE_E3);
-        music = true;
-      }
-    } else if (digitalRead(pinButtonR) == LOW) {
-      if (!music) {
-        tone(pinPiezo, NOTE_F3);
-        music = true;
-      }
-    } else if (digitalRead(pinSwitchY) == LOW) {
-      if (!music) {
-        tone(pinPiezo, NOTE_G3);
-        music = true;
-      }
-    } else if (digitalRead(pinSwitch2) == LOW) {
-      if (!music) {
-        tone(pinPiezo, NOTE_A3);
-        music = true;
-      }
-    } else if (digitalRead(pinSwitch3) == LOW) {
-      if (!music) {
-        tone(pinPiezo, NOTE_B3);
-        music = true;
-      }
-    } else {
-      if (music) {
-        noTone(pinPiezo);
-        TCCR3A = (1 << WGM30);
-        music = false;
-      }
-    }
-    
-    delay(100);
+  switch (game) {
+    case 1:
+      game1(time);
+    break;
+    case 2:
+      game2(time);
+    break;
+    case 3:
+      game3(time);
+    break;
+    case 4:
+      game4(time);
+    break;
+    default:
+      game = 1;
+    break;
+  }
 }
 
