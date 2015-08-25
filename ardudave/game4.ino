@@ -5,7 +5,7 @@
 int animPos = 0;
 unsigned long lastBlink2 = 0;
 unsigned int* animation = animation1;
-int animLen = sizeof(animation1) / sizeof(byte);
+int animLen = sizeof(animation1) / sizeof(int);
 int blinkLength = 0;
 int lastPinSwitchY = 0;
 int lastPinSwitchR = 0;
@@ -42,34 +42,34 @@ void game4(unsigned long time) {
     
   if (digitalRead(PIN_BUTTON_R) == LOW) {
     animation = animation1;
-    animLen = sizeof(animation1) / sizeof(byte);
+    animLen = sizeof(animation1) / sizeof(int);
     reset = true;
   } else if (digitalRead(PIN_BUTTON_G) == LOW) {
     animation = animation2;
-    animLen = sizeof(animation2) / sizeof(byte);
+    animLen = sizeof(animation2) / sizeof(int);
     reset = true;
   } else if (digitalRead(PIN_BUTTON_B) == LOW) {
     animation = animation3;
-    animLen = sizeof(animation3) / sizeof(byte);
+    animLen = sizeof(animation3) / sizeof(int);
     reset = true;
   } else if (digitalRead(PIN_BUTTON_W) == LOW) {
     animation = animation4;
-    animLen = sizeof(animation4) / sizeof(byte);
+    animLen = sizeof(animation4) / sizeof(int);
     reset = true;
   } else if (digitalRead(PIN_SWITCH_Y) != lastPinSwitchY) {
     lastPinSwitchY = !lastPinSwitchY;
     animation = animation5;
-    animLen = sizeof(animation5) / sizeof(byte);
+    animLen = sizeof(animation5) / sizeof(int);
     reset = true;    
   } else if (digitalRead(PIN_SWITCH_R) != lastPinSwitchR) {
     lastPinSwitchR = !lastPinSwitchR;
     animation = animation6;
-    animLen = sizeof(animation6) / sizeof(byte);
+    animLen = sizeof(animation6) / sizeof(int);
     reset = true;    
   } else if (digitalRead(PIN_SWITCH_S) != lastPinSwitchS) {
     lastPinSwitchS = !lastPinSwitchS;
     animation = animation7;
-    animLen = sizeof(animation7) / sizeof(byte);
+    animLen = sizeof(animation7) / sizeof(int);
     reset = true;    
   }
     
