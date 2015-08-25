@@ -87,32 +87,37 @@ void reset() {
 void debug() {
   Serial.println("---------");
 
-  Serial.print("ButtonR: ");
+  Serial.print(F("Last action: "));
+  Serial.println(lastAction);
+
+  Serial.print(F("ButtonR: "));
   Serial.println(digitalRead(PIN_BUTTON_R));
 
-  Serial.print("ButtonG: ");
+  Serial.print(F("ButtonG: "));
   Serial.println(digitalRead(PIN_BUTTON_G));
 
-  Serial.print("ButtonB: ");
+  Serial.print(F("ButtonB: "));
   Serial.println(digitalRead(PIN_BUTTON_B));
 
-  Serial.print("ButtonW: ");
+  Serial.print(F("ButtonW: "));
   Serial.println(digitalRead(PIN_BUTTON_W));
 
-  Serial.print("Switch3: ");
+  Serial.print(F("Switch3: "));
   Serial.println(digitalRead(PIN_SWITCH_S));
 
-  Serial.print("SwitchY: ");
+  Serial.print(F("SwitchY: "));
   Serial.println(digitalRead(PIN_SWITCH_Y));
 
-  Serial.print("SwitchR: ");
+  Serial.print(F("SwitchR: "));
   Serial.println(digitalRead(PIN_SWITCH_R));
 
-  Serial.print("PotenU: ");
+  Serial.print(F("PotenU: "));
   Serial.println(analogRead(PIN_POTEN_U));
 
-  Serial.print("PotenL: ");
+  Serial.print(F("PotenL: "));
   Serial.println(analogRead(PIN_POTEN_L));
+
+  delay(200);
 }
 
 void indicateGame(byte game) {

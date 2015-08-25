@@ -5,54 +5,101 @@
 
 int melodyPos = 0;
 unsigned long lastTone = 0;
-int* melody = 0;
+unsigned int* melody = 0;
 int melodyLen = 0;
 int toneLength = 0;
+int leds[99];
 
-void game3(unsigned long time) {
+void sort(int a[], int size) {
+    for(int i=0; i<(size-1); i++) {
+        for(int o=0; o<(size-(i+1)); o++) {
+                if(a[o] > a[o+1]) {
+                    int t = a[o];
+                    a[o] = a[o+1];
+                    a[o+1] = t;
+                }
+        }
+    }
+}
+
+void fillLeds() {
+  int melodySort[melodyLen];
+  for (int i = 0 ; i < melodyLen ; i++) {
+    melodySort[i] = TONE_FREQ(melody[i]);
+  }
+  sort(melodySort, melodyLen);
+
+  int len = 0;
+  int melodySort2[melodyLen];
+  int last = 0;
+  for (int i = 0 ; i < melodyLen ; i++) {
+    if (last != melodySort[i]) {
+      melodySort2[len] = melodySort[i];
+      last = melodySort[i];
+      len++;
+    }
+  }
+
+  for (int i = 0 ; i < melodyLen ; i++) {
+    for (int j = 0 ; j < len ; j++) {
+      if (melodySort2[j] == melody[i] << 3 >> 3) {
+        leds[i] = j;
+        break;
+      }
+    }
+  }
+}
+
+void game3(unsigned long time) {  
   if (melody) {
     if (time - lastTone > toneLength) {
       int speed = analogRead(PIN_POTEN_L) * 1.5;
       int delayLength = toneLength;
-      toneLength = speed / *(melody + melodyPos);
-      int toneFreq = *(melody + melodyPos + 1);
+
+      toneLength = speed / TONE_LEN(*(melody + melodyPos));
+      int toneFreq = TONE_FREQ(*(melody + melodyPos));
       lastTone = time;
       
-      melodyPos += 2;
+      melodyPos++;
       if (melodyPos > melodyLen) {
         melody = 0;
+        reset();
         noTone(PIN_PIEZO);
         TCCR3A = (1 << WGM30);
-        reset();
       } else {
+        reset();
         noTone(PIN_PIEZO);
         delay(delayLength / 3);
         lastTone = millis();
         if (toneFreq > 0) {
           tone(PIN_PIEZO, toneFreq);
-         
+
           switch (leds[melodyPos]) {
-            case 1:
+            case 0:
               digitalWrite(PIN_LED_1, HIGH);
             break;
-            case 2:
+            case 1:
               digitalWrite(PIN_LED_2, HIGH);
             break;
-            case 3:
+            case 2:
               digitalWrite(PIN_LED_3, HIGH);
             break;
-            case 4:
+            case 3:
               digitalWrite(PIN_LED_4, HIGH);
             break;
-            case 5:
+            case 4:
               digitalWrite(PIN_LED_5, HIGH);
             break;
-            case 6:
+            case 5:
               digitalWrite(PIN_LED_6, HIGH);
             break;
-            default:
+            case 6:
               digitalWrite(PIN_LED_RGB_R, HIGH);
+            break;
+            case 7:
               digitalWrite(PIN_LED_RGB_G, HIGH);
+            break;
+            default:
               digitalWrite(PIN_LED_RGB_B, HIGH);
             break;
           }
@@ -84,6 +131,7 @@ void game3(unsigned long time) {
       melodyPos = 0;
       lastTone = 0;
       toneLength = 0;
+      fillLeds();
     }
   }
 }

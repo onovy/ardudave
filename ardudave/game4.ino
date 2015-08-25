@@ -4,7 +4,7 @@
 
 int animPos = 0;
 unsigned long lastBlink2 = 0;
-byte* animation = animation1;
+unsigned int* animation = animation1;
 int animLen = sizeof(animation1) / sizeof(byte);
 int blinkLength = 0;
 int lastPinSwitchY = 0;
@@ -22,19 +22,19 @@ void game4(unsigned long time) {
       }
 
       int speed = analogRead(PIN_POTEN_L);
-      blinkLength = speed / *(animation + animPos);
+      blinkLength = speed / ANIMATION_LEN(*(animation + animPos));
       
-      digitalWrite(PIN_LED_1, *(animation + animPos + 1));
-      digitalWrite(PIN_LED_2, *(animation + animPos + 2));
-      digitalWrite(PIN_LED_3, *(animation + animPos + 3));
-      digitalWrite(PIN_LED_4, *(animation + animPos + 4));
-      digitalWrite(PIN_LED_5, *(animation + animPos + 5));
-      digitalWrite(PIN_LED_6, *(animation + animPos + 6));
-      digitalWrite(PIN_LED_RGB_R, *(animation + animPos + 7));
-      digitalWrite(PIN_LED_RGB_G, *(animation + animPos + 8));
-      digitalWrite(PIN_LED_RGB_B, *(animation + animPos + 9));
+      digitalWrite(PIN_LED_1, ANIMATION_LED1(*(animation + animPos)));
+      digitalWrite(PIN_LED_2, ANIMATION_LED2(*(animation + animPos)));
+      digitalWrite(PIN_LED_3, ANIMATION_LED3(*(animation + animPos)));
+      digitalWrite(PIN_LED_4, ANIMATION_LED4(*(animation + animPos)));
+      digitalWrite(PIN_LED_5, ANIMATION_LED5(*(animation + animPos)));
+      digitalWrite(PIN_LED_6, ANIMATION_LED6(*(animation + animPos)));
+      digitalWrite(PIN_LED_RGB_R, ANIMATION_LED7(*(animation + animPos)));
+      digitalWrite(PIN_LED_RGB_G, ANIMATION_LED8(*(animation + animPos)));
+      digitalWrite(PIN_LED_RGB_B, ANIMATION_LED9(*(animation + animPos)));
 
-      animPos += 10;
+      animPos++;
     }
   }
   
