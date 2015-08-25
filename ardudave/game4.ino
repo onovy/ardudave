@@ -68,8 +68,8 @@ void game4(unsigned long time) {
     reset = true;    
   } else if (digitalRead(PIN_SWITCH_S) != lastPinSwitchS) {
     lastPinSwitchS = !lastPinSwitchS;
-    animation = animation5;
-    animLen = sizeof(animation5) / sizeof(byte);
+    animation = animation7;
+    animLen = sizeof(animation7) / sizeof(byte);
     reset = true;    
   }
     
