@@ -21,8 +21,8 @@ unsigned long lastTime = 0;
 bool plusOne = false;
 
 void game1(unsigned long time) {
-  int toneA = analogRead(pinPotenU);
-  int speedA = analogRead(pinPotenL);
+  int toneA = analogRead(PIN_POTEN_U);
+  int speedA = analogRead(PIN_POTEN_L);
 
   int toneI = (int) ceil(toneA * (sizeof(tones) / sizeof(int) - 1) / 1024);
   
@@ -37,6 +37,6 @@ void game1(unsigned long time) {
 
   int toneF = tones[toneI];
 
-  tone(pinPiezo, toneF);
+  tone(PIN_PIEZO, toneF);
 }
 

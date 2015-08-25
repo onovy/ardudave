@@ -9,7 +9,7 @@ int animLen = sizeof(animation1) / sizeof(byte);
 int blinkLength = 0;
 int lastPinSwitchY = 0;
 int lastPinSwitchR = 0;
-int lastPinSwitch3 = 0;
+int lastPinSwitchS = 0;
 
 void game4(unsigned long time) {
   if (animation) {
@@ -21,18 +21,18 @@ void game4(unsigned long time) {
         blinkLength = 0;
       }
 
-      int speed = analogRead(pinPotenL);
+      int speed = analogRead(PIN_POTEN_L);
       blinkLength = speed / *(animation + animPos);
       
-      digitalWrite(pinLed1, *(animation + animPos + 1));
-      digitalWrite(pinLed2, *(animation + animPos + 2));
-      digitalWrite(pinLed3, *(animation + animPos + 3));
-      digitalWrite(pinLed4, *(animation + animPos + 4));
-      digitalWrite(pinLed5, *(animation + animPos + 5));
-      digitalWrite(pinLed6, *(animation + animPos + 6));
-      digitalWrite(pinLedRgbR, *(animation + animPos + 7));
-      digitalWrite(pinLedRgbG, *(animation + animPos + 8));
-      digitalWrite(pinLedRgbB, *(animation + animPos + 9));
+      digitalWrite(PIN_LED_1, *(animation + animPos + 1));
+      digitalWrite(PIN_LED_2, *(animation + animPos + 2));
+      digitalWrite(PIN_LED_3, *(animation + animPos + 3));
+      digitalWrite(PIN_LED_4, *(animation + animPos + 4));
+      digitalWrite(PIN_LED_5, *(animation + animPos + 5));
+      digitalWrite(PIN_LED_6, *(animation + animPos + 6));
+      digitalWrite(PIN_LED_RGB_R, *(animation + animPos + 7));
+      digitalWrite(PIN_LED_RGB_G, *(animation + animPos + 8));
+      digitalWrite(PIN_LED_RGB_B, *(animation + animPos + 9));
 
       animPos += 10;
     }
@@ -40,34 +40,34 @@ void game4(unsigned long time) {
   
   bool reset = false;
     
-  if (digitalRead(pinButtonR) == LOW) {
+  if (digitalRead(PIN_BUTTON_R) == LOW) {
     animation = animation1;
     animLen = sizeof(animation1) / sizeof(byte);
     reset = true;
-  } else if (digitalRead(pinButtonG) == LOW) {
+  } else if (digitalRead(PIN_BUTTON_G) == LOW) {
     animation = animation2;
     animLen = sizeof(animation2) / sizeof(byte);
     reset = true;
-  } else if (digitalRead(pinButtonB) == LOW) {
+  } else if (digitalRead(PIN_BUTTON_B) == LOW) {
     animation = animation3;
     animLen = sizeof(animation3) / sizeof(byte);
     reset = true;
-  } else if (digitalRead(pinButtonW) == LOW) {
+  } else if (digitalRead(PIN_BUTTON_W) == LOW) {
     animation = animation4;
     animLen = sizeof(animation4) / sizeof(byte);
     reset = true;
-  } else if (digitalRead(pinSwitchY) != lastPinSwitchY) {
+  } else if (digitalRead(PIN_SWITCH_Y) != lastPinSwitchY) {
     lastPinSwitchY = !lastPinSwitchY;
     animation = animation5;
     animLen = sizeof(animation5) / sizeof(byte);
     reset = true;    
-  } else if (digitalRead(pinSwitchR) != lastPinSwitchR) {
+  } else if (digitalRead(PIN_SWITCH_R) != lastPinSwitchR) {
     lastPinSwitchR = !lastPinSwitchR;
     animation = animation6;
     animLen = sizeof(animation6) / sizeof(byte);
     reset = true;    
-  } else if (digitalRead(pinSwitch3) != lastPinSwitch3) {
-    lastPinSwitch3 = !lastPinSwitch3;
+  } else if (digitalRead(PIN_SWITCH_S) != lastPinSwitchS) {
+    lastPinSwitchS = !lastPinSwitchS;
     animation = animation5;
     animLen = sizeof(animation5) / sizeof(byte);
     reset = true;    

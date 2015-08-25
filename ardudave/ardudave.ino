@@ -16,73 +16,73 @@ byte eepromLoadGame() {
 void setup() {
   Serial.begin(9600); 
 
-  pinMode(pinLed1, OUTPUT);
-  pinMode(pinLed2, OUTPUT);
-  pinMode(pinLed3, OUTPUT);
-  pinMode(pinLed4, OUTPUT);
-  pinMode(pinLed5, OUTPUT);
-  pinMode(pinLed6, OUTPUT);
-  pinMode(pinLedRgbR, OUTPUT);
-  pinMode(pinLedRgbG, OUTPUT);
-  pinMode(pinLedRgbB, OUTPUT);
-  pinMode(pinPiezo, OUTPUT);
-  pinMode(pinButtonB, INPUT_PULLUP);
-  pinMode(pinButtonW, INPUT_PULLUP);
-  pinMode(pinButtonG, INPUT_PULLUP);
-  pinMode(pinButtonR, INPUT_PULLUP);
-  pinMode(pinSwitchY, INPUT_PULLUP);
-  pinMode(pinSwitchR, INPUT_PULLUP);
-  pinMode(pinSwitch3, INPUT_PULLUP);
-  pinMode(pinPotenU, INPUT);
-  pinMode(pinPotenL, INPUT);
-  pinMode(pinIO, INPUT);
+  pinMode(PIN_LED_1, OUTPUT);
+  pinMode(PIN_LED_2, OUTPUT);
+  pinMode(PIN_LED_3, OUTPUT);
+  pinMode(PIN_LED_4, OUTPUT);
+  pinMode(PIN_LED_5, OUTPUT);
+  pinMode(PIN_LED_6, OUTPUT);
+  pinMode(PIN_LED_RGB_R, OUTPUT);
+  pinMode(PIN_LED_RGB_G, OUTPUT);
+  pinMode(PIN_LED_RGB_B, OUTPUT);
+  pinMode(PIN_PIEZO, OUTPUT);
+  pinMode(PIN_BUTTON_B, INPUT_PULLUP);
+  pinMode(PIN_BUTTON_W, INPUT_PULLUP);
+  pinMode(PIN_BUTTON_G, INPUT_PULLUP);
+  pinMode(PIN_BUTTON_R, INPUT_PULLUP);
+  pinMode(PIN_SWITCH_Y, INPUT_PULLUP);
+  pinMode(PIN_SWITCH_R, INPUT_PULLUP);
+  pinMode(PIN_SWITCH_S, INPUT_PULLUP);
+  pinMode(PIN_POTEN_U, INPUT);
+  pinMode(PIN_POTEN_L, INPUT);
+  pinMode(PIN_IO, INPUT);
 
   game = eepromLoadGame();
   indicateGame(game);
 }
 
 void reset() {
-  digitalWrite(pinLed1, LOW);
-  digitalWrite(pinLed2, LOW);
-  digitalWrite(pinLed3, LOW);
-  digitalWrite(pinLed4, LOW);
-  digitalWrite(pinLed5, LOW);
-  digitalWrite(pinLed6, LOW);
-  digitalWrite(pinLedRgbR, LOW);
-  digitalWrite(pinLedRgbG, LOW);
-  digitalWrite(pinLedRgbB, LOW);
-  noTone(pinPiezo);
+  digitalWrite(PIN_LED_1, LOW);
+  digitalWrite(PIN_LED_2, LOW);
+  digitalWrite(PIN_LED_3, LOW);
+  digitalWrite(PIN_LED_4, LOW);
+  digitalWrite(PIN_LED_5, LOW);
+  digitalWrite(PIN_LED_6, LOW);
+  digitalWrite(PIN_LED_RGB_R, LOW);
+  digitalWrite(PIN_LED_RGB_G, LOW);
+  digitalWrite(PIN_LED_RGB_B, LOW);
+  noTone(PIN_PIEZO);
 }
 
 void debug() {
   Serial.println("---------");
 
   Serial.print("ButtonR: ");
-  Serial.println(digitalRead(pinButtonR));
+  Serial.println(digitalRead(PIN_BUTTON_R));
 
   Serial.print("ButtonG: ");
-  Serial.println(digitalRead(pinButtonG));
+  Serial.println(digitalRead(PIN_BUTTON_G));
 
   Serial.print("ButtonB: ");
-  Serial.println(digitalRead(pinButtonB));
+  Serial.println(digitalRead(PIN_BUTTON_B));
 
   Serial.print("ButtonW: ");
-  Serial.println(digitalRead(pinButtonW));
+  Serial.println(digitalRead(PIN_BUTTON_W));
 
   Serial.print("Switch3: ");
-  Serial.println(digitalRead(pinSwitch3));
+  Serial.println(digitalRead(PIN_SWITCH_S));
 
   Serial.print("SwitchY: ");
-  Serial.println(digitalRead(pinSwitchY));
+  Serial.println(digitalRead(PIN_SWITCH_Y));
 
   Serial.print("SwitchR: ");
-  Serial.println(digitalRead(pinSwitchR));
+  Serial.println(digitalRead(PIN_SWITCH_R));
 
   Serial.print("PotenU: ");
-  Serial.println(analogRead(pinPotenU));
+  Serial.println(analogRead(PIN_POTEN_U));
 
   Serial.print("PotenL: ");
-  Serial.println(analogRead(pinPotenL));
+  Serial.println(analogRead(PIN_POTEN_L));
 }
 
 void indicateGame(byte game) {
@@ -90,27 +90,27 @@ void indicateGame(byte game) {
   
   switch (game) {
     case 1:
-      digitalWrite(pinLed1, HIGH);
+      digitalWrite(PIN_LED_1, HIGH);
     break;
     case 2:
-      digitalWrite(pinLed2, HIGH);
+      digitalWrite(PIN_LED_2, HIGH);
     break;
     case 3:
-      digitalWrite(pinLed3, HIGH);
+      digitalWrite(PIN_LED_3, HIGH);
     break;
     case 4:
-      digitalWrite(pinLed4, HIGH);
+      digitalWrite(PIN_LED_4, HIGH);
     break;
     case 5:
-      digitalWrite(pinLed5, HIGH);
+      digitalWrite(PIN_LED_5, HIGH);
     break;
     case 6:
-      digitalWrite(pinLed6, HIGH);
+      digitalWrite(PIN_LED_6, HIGH);
     break;
     case 7:
-      digitalWrite(pinLedRgbR, HIGH);
-      digitalWrite(pinLedRgbG, HIGH);
-      digitalWrite(pinLedRgbB, HIGH);
+      digitalWrite(PIN_LED_RGB_R, HIGH);
+      digitalWrite(PIN_LED_RGB_G, HIGH);
+      digitalWrite(PIN_LED_RGB_B, HIGH);
     break;
   }
 
@@ -126,7 +126,7 @@ void loop() {
   unsigned long time = millis();
 
   // Red and white button pressed together -> change game
-  if (digitalRead(pinButtonR) == LOW && digitalRead(pinButtonW) == LOW) {
+  if (digitalRead(PIN_BUTTON_R) == LOW && digitalRead(PIN_BUTTON_W) == LOW) {
     if (!holdingFrom) {
       holdingFrom = time;
     }

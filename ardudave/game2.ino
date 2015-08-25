@@ -4,8 +4,8 @@ bool blink = true;
 unsigned long lastBlink = 0;
 
 void game2(unsigned long time) {
-  int brightness = analogRead(pinPotenL) / 4;
-  int color = analogRead(pinPotenU);
+  int brightness = analogRead(PIN_POTEN_L) / 4;
+  int color = analogRead(PIN_POTEN_U);
 
   // Blink
   if (time - lastBlink > brightness) {
@@ -14,12 +14,12 @@ void game2(unsigned long time) {
   }
 
   // Set LEDs by button/switch states
-  digitalWrite(pinLed1, !digitalRead(pinButtonW));
-  digitalWrite(pinLed2, digitalRead(pinSwitchY) && blink);
-  digitalWrite(pinLed3, digitalRead(pinSwitchR) && !blink);
-  digitalWrite(pinLed4, !digitalRead(pinButtonR));
-  digitalWrite(pinLed5, !digitalRead(pinButtonG));
-  digitalWrite(pinLed6, !digitalRead(pinButtonB));
+  digitalWrite(PIN_LED_1, !digitalRead(PIN_BUTTON_W));
+  digitalWrite(PIN_LED_2, digitalRead(PIN_SWITCH_Y) && blink);
+  digitalWrite(PIN_LED_3, digitalRead(PIN_SWITCH_R) && !blink);
+  digitalWrite(PIN_LED_4, !digitalRead(PIN_BUTTON_R));
+  digitalWrite(PIN_LED_5, !digitalRead(PIN_BUTTON_G));
+  digitalWrite(PIN_LED_6, !digitalRead(PIN_BUTTON_B));
 
   // Count RGB <0..1> from "color" <0.1024>
   float rgbR = (float) color / 1000;
@@ -38,8 +38,8 @@ void game2(unsigned long time) {
     rgbB = 1.00;
   }
 
-  analogWrite(pinLedRgbR, rgbR * brightness);
-  analogWrite(pinLedRgbG, rgbG * brightness);
-  analogWrite(pinLedRgbB, rgbB * brightness);
+  analogWrite(PIN_LED_RGB_R, rgbR * brightness);
+  analogWrite(PIN_LED_RGB_G, rgbG * brightness);
+  analogWrite(PIN_LED_RGB_B, rgbB * brightness);
 }
 
