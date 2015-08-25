@@ -1,6 +1,35 @@
 #include "pitches.h"
 #include "pins.h"
 #include <EEPROM.h>
+#include <avr/sleep.h>
+
+unsigned long lastAction;
+// Auto sleep after 3 minutes
+#define SLEEP_AFTER_MILIS 180000
+
+void wakeupInterrupt() {
+  detachInterrupt(1);
+  detachInterrupt(2);
+  detachInterrupt(3);
+}
+
+void sleep() {
+  Serial.println("Sleeping");
+  reset();
+
+  attachInterrupt(1, wakeupInterrupt, LOW);
+  attachInterrupt(2, wakeupInterrupt, LOW);
+  attachInterrupt(3, wakeupInterrupt, LOW);
+
+  delay(100);
+
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  sleep_enable();
+  sleep_mode();
+  sleep_disable(); 
+
+  lastAction = millis();
+}
 
 byte game;
 void eepromSaveGame(byte game) {
@@ -14,6 +43,7 @@ byte eepromLoadGame() {
 }
 
 void setup() {
+  lastAction = millis();
   Serial.begin(9600); 
 
   pinMode(PIN_LED_1, OUTPUT);
@@ -121,10 +151,55 @@ void indicateGame(byte game) {
 
 unsigned long holdingFrom = 0;
 byte games = 4;
+bool stateDigital[7];
+int stateAnalog[2];
 void loop() {
   // debug();
   unsigned long time = millis();
 
+  // Auto sleep Arduino after specified time
+  if (time - lastAction > SLEEP_AFTER_MILIS) {
+    sleep();
+  }
+  if (stateDigital[0] != digitalRead(PIN_BUTTON_W)) {
+    stateDigital[0] = !stateDigital[0];
+    lastAction = time;
+  }
+  if (stateDigital[1] != digitalRead(PIN_BUTTON_B)) {
+    stateDigital[1] = !stateDigital[1];
+    lastAction = time;
+  }
+  if (stateDigital[2] != digitalRead(PIN_BUTTON_G)) {
+    stateDigital[2] = !stateDigital[2];
+    lastAction = time;
+  }
+  if (stateDigital[3] != digitalRead(PIN_BUTTON_R)) {
+    stateDigital[3] = !stateDigital[3];
+    lastAction = time;
+  }
+  if (stateDigital[4] != digitalRead(PIN_SWITCH_R)) {
+    stateDigital[4] = !stateDigital[4];
+    lastAction = time;
+  }
+  if (stateDigital[5] != digitalRead(PIN_SWITCH_Y)) {
+    stateDigital[5] = !stateDigital[5];
+    lastAction = time;
+  }
+  if (stateDigital[6] != digitalRead(PIN_SWITCH_S)) {
+    stateDigital[6] = !stateDigital[6];
+    lastAction = time;
+  }
+  int diffU = stateAnalog[0] - analogRead(PIN_POTEN_U);
+  if (abs(diffU) > 5) {
+    stateAnalog[0] = analogRead(PIN_POTEN_U);
+    lastAction = time;
+  }
+  int diffL = stateAnalog[1] - analogRead(PIN_POTEN_L);
+  if (abs(diffL) > 5) {
+    stateAnalog[1] = analogRead(PIN_POTEN_L);
+    lastAction = time;
+  }
+  
   // Red and white button pressed together -> change game
   if (digitalRead(PIN_BUTTON_R) == LOW && digitalRead(PIN_BUTTON_W) == LOW) {
     if (!holdingFrom) {
