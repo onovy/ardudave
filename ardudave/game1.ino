@@ -4,16 +4,11 @@
 
 int tones[] = {
   NOTE_C3,
-  NOTE_CS3,
   NOTE_D3,
-  NOTE_DS3,
   NOTE_E3,
   NOTE_F3, 
-  NOTE_FS3,
   NOTE_G3,
-  NOTE_GS3,
   NOTE_A3,
-  NOTE_AS3,
   NOTE_B3
 };
 
@@ -38,5 +33,7 @@ void game1(unsigned long time) {
   int toneF = tones[toneI];
 
   tone(PIN_PIEZO, toneF);
+  resetLed();
+  digitalWriteLed(toneI, HIGH);
 }
 
