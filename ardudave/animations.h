@@ -1,5 +1,5 @@
 #define ANIMATION(len, led1, led2, led3, led4, led5, led6, led7, led8, led9) ( \
-  ((len==1 ? 0 : (len==2 ? 1 : (len==4 ? 2 : (len==8 ? 3 : (len== 16 ? 4 : 0))))) << 9) + \
+  ((len==1 ? 0 : (len == 2 ? 1 : (len == 4 ? 2 : (len == 8 ? 3 : (len == 16 ? 4 : 0))))) << 9) + \
   (led9 << 8) + \
   (led8 << 7) + \
   (led7 << 6) + \
