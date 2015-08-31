@@ -63,7 +63,7 @@ void game3(unsigned long time) {
       melodyPos++;
       if (melodyPos > melodyLen) {
         melody = 0;
-        reset();
+        resetLed();
         noTone(PIN_PIEZO);
         TCCR3A = (1 << WGM30);
       } else {
@@ -74,35 +74,7 @@ void game3(unsigned long time) {
         if (toneFreq > 0) {
           tone(PIN_PIEZO, toneFreq);
 
-          switch (leds[melodyPos]) {
-            case 0:
-              digitalWrite(PIN_LED_1, HIGH);
-            break;
-            case 1:
-              digitalWrite(PIN_LED_2, HIGH);
-            break;
-            case 2:
-              digitalWrite(PIN_LED_3, HIGH);
-            break;
-            case 3:
-              digitalWrite(PIN_LED_4, HIGH);
-            break;
-            case 4:
-              digitalWrite(PIN_LED_5, HIGH);
-            break;
-            case 5:
-              digitalWrite(PIN_LED_6, HIGH);
-            break;
-            case 6:
-              digitalWrite(PIN_LED_RGB_R, HIGH);
-            break;
-            case 7:
-              digitalWrite(PIN_LED_RGB_G, HIGH);
-            break;
-            default:
-              digitalWrite(PIN_LED_RGB_B, HIGH);
-            break;
-          }
+          digitalWriteLed(leds[melodyPos], HIGH);
         }
       }
     }

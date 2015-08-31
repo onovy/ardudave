@@ -3,6 +3,38 @@
 #include <EEPROM.h>
 #include <avr/sleep.h>
 
+void digitalWriteLed(byte ledId, byte value) {
+          switch (ledId) {
+            case 0:
+              digitalWrite(PIN_LED_1, value);
+            break;
+            case 1:
+              digitalWrite(PIN_LED_2, value);
+            break;
+            case 2:
+              digitalWrite(PIN_LED_3, value);
+            break;
+            case 3:
+              digitalWrite(PIN_LED_4, value);
+            break;
+            case 4:
+              digitalWrite(PIN_LED_5, value);
+            break;
+            case 5:
+              digitalWrite(PIN_LED_6, value);
+            break;
+            case 6:
+              digitalWrite(PIN_LED_RGB_R, value);
+            break;
+            case 7:
+              digitalWrite(PIN_LED_RGB_G, value);
+            break;
+            default:
+              digitalWrite(PIN_LED_RGB_B, value);
+            break;
+          }
+}
+
 unsigned long lastAction;
 // Auto sleep after 3 minutes
 #define SLEEP_AFTER_MILIS 180000
@@ -72,6 +104,11 @@ void setup() {
 }
 
 void reset() {
+  resetLed();
+  noTone(PIN_PIEZO);
+}
+
+void resetLed() {
   digitalWrite(PIN_LED_1, LOW);
   digitalWrite(PIN_LED_2, LOW);
   digitalWrite(PIN_LED_3, LOW);
@@ -80,8 +117,7 @@ void reset() {
   digitalWrite(PIN_LED_6, LOW);
   digitalWrite(PIN_LED_RGB_R, LOW);
   digitalWrite(PIN_LED_RGB_G, LOW);
-  digitalWrite(PIN_LED_RGB_B, LOW);
-  noTone(PIN_PIEZO);
+  digitalWrite(PIN_LED_RGB_B, LOW);  
 }
 
 void debug() {
