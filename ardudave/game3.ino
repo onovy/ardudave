@@ -5,16 +5,16 @@
 
 int melodyPos = 0;
 unsigned long lastTone = 0;
-unsigned int* melody = 0;
+const unsigned int* melody = 0;
 int melodyLen = 0;
 int toneLength = 0;
-int leds[99];
+unsigned int leds[99];
 
-void sort(int a[], int size) {
+void sort(unsigned int a[], unsigned int size) {
     for(int i=0; i<(size-1); i++) {
         for(int o=0; o<(size-(i+1)); o++) {
                 if(a[o] > a[o+1]) {
-                    int t = a[o];
+                    unsigned int t = a[o];
                     a[o] = a[o+1];
                     a[o+1] = t;
                 }
@@ -23,15 +23,16 @@ void sort(int a[], int size) {
 }
 
 void fillLeds() {
-  int melodySort[melodyLen];
+  unsigned int melodySort[melodyLen];
   for (int i = 0 ; i < melodyLen ; i++) {
-    melodySort[i] = TONE_FREQ(melody[i]);
+    unsigned int oneTone = pgm_read_word_near(melody + i);
+    melodySort[i] = TONE_FREQ(oneTone);
   }
   sort(melodySort, melodyLen);
-
+  
   int len = 0;
-  int melodySort2[melodyLen];
-  int last = 0;
+  unsigned int melodySort2[melodyLen];
+  unsigned int last = 0;
   for (int i = 0 ; i < melodyLen ; i++) {
     if (last != melodySort[i]) {
       melodySort2[len] = melodySort[i];
@@ -42,7 +43,8 @@ void fillLeds() {
 
   for (int i = 0 ; i < melodyLen ; i++) {
     for (int j = 0 ; j < len ; j++) {
-      if (melodySort2[j] == melody[i] << 3 >> 3) {
+      unsigned int oneTone = pgm_read_word_near(melody + i);
+      if (melodySort2[j] == TONE_FREQ(oneTone)) {
         leds[i] = j;
         break;
       }
@@ -56,8 +58,9 @@ void game3(unsigned long time) {
       int speed = analogRead(PIN_POTEN_L) * 1.5;
       int delayLength = toneLength;
 
-      toneLength = speed / TONE_LEN(*(melody + melodyPos));
-      int toneFreq = TONE_FREQ(*(melody + melodyPos));
+      unsigned int oneTone = pgm_read_word_near(melody + melodyPos);
+      toneLength = speed / TONE_LEN(oneTone);
+      int toneFreq = TONE_FREQ(oneTone);
       lastTone = time;
       
       melodyPos++;

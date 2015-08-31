@@ -1,3 +1,5 @@
+#include <avr/pgmspace.h>
+
 #define ANIMATION(len, led1, led2, led3, led4, led5, led6, led7, led8, led9) ( \
   ((len==1 ? 0 : (len == 2 ? 1 : (len == 4 ? 2 : (len == 8 ? 3 : (len == 16 ? 4 : 0))))) << 9) + \
   (led9 << 8) + \
@@ -20,7 +22,7 @@
 #define ANIMATION_LED2(anim) ( anim << 14 >> 14 >> 1 )
 #define ANIMATION_LED1(anim) ( anim << 15 >> 15 )
 
-unsigned int animation1[] = {
+const static unsigned int animation1[] PROGMEM = {
   ANIMATION(4, 1, 0, 0, 0, 0, 0, 0, 0, 0),
   ANIMATION(4, 0, 1, 0, 0, 0, 0, 0, 0, 0),
   ANIMATION(4, 0, 0, 1, 0, 0, 0, 0, 0, 0),
@@ -39,12 +41,12 @@ unsigned int animation1[] = {
   ANIMATION(4, 0, 1, 0, 0, 0, 0, 0, 0, 0),
 };
 
-unsigned int animation2[] = {
+const static unsigned int animation2[] PROGMEM = {
   ANIMATION(4, 1, 0, 1, 0, 1, 0, 1, 0, 1),
   ANIMATION(4, 0, 1, 0, 1, 0, 1, 0, 1, 0),
 };
 
-unsigned int animation3[] = {
+const static unsigned int animation3[] PROGMEM = {
   ANIMATION(4, 1, 0, 0, 0, 0, 0, 1, 1, 1),
   ANIMATION(4, 0, 1, 0, 0, 0, 1, 0, 0, 0),
   ANIMATION(4, 0, 0, 1, 0, 1, 0, 0, 0, 0),
@@ -59,7 +61,7 @@ unsigned int animation3[] = {
   ANIMATION(4, 1, 1, 0, 0, 0, 1, 1, 1, 1),
 };
 
-unsigned int animation4[] = {
+const static unsigned int animation4[] PROGMEM = {
   ANIMATION(4, 0, 0, 0, 0, 0, 0, 0, 0, 0),
   ANIMATION(4, 1, 0, 0, 0, 0, 0, 0, 0, 0),
   ANIMATION(4, 1, 1, 0, 0, 0, 0, 0, 0, 0),
@@ -90,14 +92,14 @@ unsigned int animation4[] = {
   ANIMATION(4, 1, 0, 0, 0, 0, 0, 0, 0, 0),
 };
 
-unsigned int animation5[] = {
+const static unsigned int animation5[] PROGMEM = {
   ANIMATION(4, 1, 1, 0, 0, 1, 1, 0, 0, 0),
   ANIMATION(4, 0, 1, 1, 0, 0, 1, 1, 1, 1),
   ANIMATION(4, 0, 0, 1, 1, 0, 0, 1, 1, 1),
   ANIMATION(4, 1, 0, 0, 1, 1, 0, 0, 0, 0),
 };
 
-unsigned int animation6[] = {
+const static unsigned int animation6[] PROGMEM = {
   ANIMATION(4, 0, 1, 1, 1, 1, 1, 1, 1, 1),
   ANIMATION(4, 1, 0, 1, 1, 1, 1, 1, 1, 1),
   ANIMATION(4, 1, 1, 0, 1, 1, 1, 1, 1, 1),
@@ -112,7 +114,7 @@ unsigned int animation6[] = {
   ANIMATION(4, 1, 0, 1, 1, 1, 1, 1, 1, 1),
 };
 
-unsigned int animation7[] = {
+const static unsigned int animation7[] PROGMEM = {
   ANIMATION(4, 1, 0, 0, 0, 0, 0, 0, 0, 0),
   ANIMATION(4, 0, 0, 0, 0, 0, 0, 1, 1, 1),
   ANIMATION(4, 0, 1, 0, 0, 0, 0, 0, 0, 0),

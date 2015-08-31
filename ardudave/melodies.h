@@ -1,9 +1,11 @@
+#include <avr/pgmspace.h>
+
 #define TONE(len, freq) ( ((len == 1 ? 0 : (len == 2 ? 1 : (len == 4 ? 2 : (len == 8 ? 3 : (len == 16 ? 4 : 0))))) << 13) + freq )
 #define TONE_LEN(tone) pow(2, (tone >> 13))
 #define TONE_FREQ(tone) ( tone << 3 >> 3 )
 
 // Skakal pes
-unsigned int melody1[] = {
+const static unsigned int melody1[] PROGMEM = {
   TONE(8, NOTE_G3),
   TONE(8, NOTE_G3),
   TONE(8, NOTE_E3),
@@ -42,7 +44,7 @@ unsigned int melody1[] = {
 };
 
 // Ja do lesa nepojedu
-unsigned int melody2[] = {
+const static unsigned int melody2[] PROGMEM = {
   TONE(8, NOTE_C3),
   TONE(8, NOTE_E3),
   TONE(4, NOTE_G3),
@@ -80,7 +82,7 @@ unsigned int melody2[] = {
 };
 
 // Holka modrooka
-unsigned int melody3[] = {
+const static unsigned int melody3[] PROGMEM = {
   TONE(4, NOTE_FS3),
   TONE(4, NOTE_B3),
   TONE(8, NOTE_A3),
@@ -168,7 +170,7 @@ unsigned int melody3[] = {
 };
 
 // Ja mam kone
-unsigned int melody4[] = {
+const static unsigned int melody4[] PROGMEM = {
   TONE(8, NOTE_G3),
   TONE(8, NOTE_G3),
   TONE(8, NOTE_FS3),
