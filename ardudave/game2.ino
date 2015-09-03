@@ -53,6 +53,8 @@ void game2(unsigned long time) {
     digitalWrite(PIN_LED_RGB_R, LOW);
     digitalWrite(PIN_LED_RGB_G, LOW);
     digitalWrite(PIN_LED_RGB_B, LOW);
+
+    powerSave();
   }
 }
 

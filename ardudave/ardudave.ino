@@ -55,12 +55,11 @@ void sleep() {
 
   delay(100);
 
-  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   sleep_enable();
   sleep_mode();
   sleep_disable(); 
 
-  lastAction = millis();
+  lastAction = _millis();
 }
 
 byte game;
@@ -74,9 +73,27 @@ byte eepromLoadGame() {
   return EEPROM.read(0);
 }
 
+volatile unsigned long sleptTime = 0;
+ISR(WDT_vect) {
+  sleptTime += 32;
+}
+void powerSave() {
+  // Sleep for a +- 32ms (source: http://citizen-sensing.org/2013/07/arduino-watchdog/)
+  MCUSR &= ~(1 << WDRF);              // reset status flag
+  WDTCSR |= (1 << WDCE) | (1 << WDE); // enable configuration changes
+  WDTCSR = (1 << WDP0);               // set the prescaler = 1
+  WDTCSR |= (1 << WDIE);              // enable interrupt mode
+  sleep_enable();                     // enable the sleep mode ready for use
+  sleep_mode();                       // trigger the sleep
+  sleep_disable();                    // prevent further sleeps
+  WDTCSR |= (1 << WDCE);              // enable configuration changes
+  WDTCSR = 0;                         // disable watchdog
+}
+
 void setup() {
   lastAction = millis();
   Serial.begin(9600); 
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 
   pinMode(PIN_LED_1, OUTPUT);
   pinMode(PIN_LED_2, OUTPUT);
@@ -190,13 +207,17 @@ void indicateGame(byte game) {
   reset();
 }
 
+unsigned long _millis() {
+  return millis() + sleptTime;
+}
+
 unsigned long holdingFrom = 0;
 byte games = 4;
 bool stateDigital[7];
 int stateAnalog[2];
 void loop() {
   // debug();
-  unsigned long time = millis();
+  unsigned long time = _millis();
 
   // Auto sleep Arduino after specified time
   if (stateDigital[0] != digitalRead(PIN_BUTTON_W)) {

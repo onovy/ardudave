@@ -12,35 +12,9 @@ int lastPinSwitchR = 0;
 int lastPinSwitchS = 0;
 
 void game4(unsigned long time) {
-  if (animation) {
-    if (time - lastBlink2 > blinkLength) {
-      lastBlink2 = time;
-      
-      if (animPos >= animLen) {
-        animPos = 0;
-        blinkLength = 0;
-      }
+  powerSave();
 
-      int speed = analogRead(PIN_POTEN_L);
-      unsigned int oneAnim = pgm_read_word_near(animation + animPos);
-      blinkLength = speed / ANIMATION_LEN(oneAnim);
-      
-      digitalWrite(PIN_LED_1, ANIMATION_LED1(oneAnim));
-      digitalWrite(PIN_LED_2, ANIMATION_LED2(oneAnim));
-      digitalWrite(PIN_LED_3, ANIMATION_LED3(oneAnim));
-      digitalWrite(PIN_LED_4, ANIMATION_LED4(oneAnim));
-      digitalWrite(PIN_LED_5, ANIMATION_LED5(oneAnim));
-      digitalWrite(PIN_LED_6, ANIMATION_LED6(oneAnim));
-      digitalWrite(PIN_LED_RGB_R, ANIMATION_LED7(oneAnim));
-      digitalWrite(PIN_LED_RGB_G, ANIMATION_LED8(oneAnim));
-      digitalWrite(PIN_LED_RGB_B, ANIMATION_LED9(oneAnim));
-
-      animPos++;
-    }
-  }
-  
   bool reset = false;
-    
   if (digitalRead(PIN_BUTTON_R) == LOW) {
     animation = animation1;
     animLen = sizeof(animation1) / sizeof(int);
@@ -76,8 +50,35 @@ void game4(unsigned long time) {
     
   if (reset) {
     animPos = 0;
-    lastBlink2 = 0;
+    lastBlink2 = time;
     blinkLength = 0;
+  }
+
+  if (animation) {
+    if (time - lastBlink2 > blinkLength) {
+      lastBlink2 = time;
+      
+      if (animPos >= animLen) {
+        animPos = 0;
+        blinkLength = 0;
+      }
+
+      int speed = analogRead(PIN_POTEN_L);
+      unsigned int oneAnim = pgm_read_word_near(animation + animPos);
+      blinkLength = speed / ANIMATION_LEN(oneAnim);
+      
+      digitalWrite(PIN_LED_1, ANIMATION_LED1(oneAnim));
+      digitalWrite(PIN_LED_2, ANIMATION_LED2(oneAnim));
+      digitalWrite(PIN_LED_3, ANIMATION_LED3(oneAnim));
+      digitalWrite(PIN_LED_4, ANIMATION_LED4(oneAnim));
+      digitalWrite(PIN_LED_5, ANIMATION_LED5(oneAnim));
+      digitalWrite(PIN_LED_6, ANIMATION_LED6(oneAnim));
+      digitalWrite(PIN_LED_RGB_R, ANIMATION_LED7(oneAnim));
+      digitalWrite(PIN_LED_RGB_G, ANIMATION_LED8(oneAnim));
+      digitalWrite(PIN_LED_RGB_B, ANIMATION_LED9(oneAnim));
+
+      animPos++;
+    }
   }
 }
 

@@ -73,7 +73,7 @@ void game3(unsigned long time) {
         reset();
         noTone(PIN_PIEZO);
         delay(delayLength / 3);
-        lastTone = millis();
+        lastTone = _millis();
         if (toneFreq > 0) {
           tone(PIN_PIEZO, toneFreq);
 
@@ -107,6 +107,8 @@ void game3(unsigned long time) {
       lastTone = 0;
       toneLength = 0;
       fillLeds();
+    } else {
+      powerSave();
     }
   }
 }

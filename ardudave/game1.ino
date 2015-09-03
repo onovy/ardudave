@@ -23,7 +23,7 @@ void game1(unsigned long time) {
   
   if (time - lastTime > speedA / 2) {
     plusOne = !plusOne;
-    lastTime = millis();
+    lastTime = _millis();
   }
   
   if (plusOne) {
