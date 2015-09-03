@@ -97,7 +97,7 @@ void setup() {
   pinMode(PIN_SWITCH_S, INPUT_PULLUP);
   pinMode(PIN_POTEN_U, INPUT);
   pinMode(PIN_POTEN_L, INPUT);
-  pinMode(PIN_IO, INPUT);
+  pinMode(PIN_IO, INPUT_PULLUP);
 
   game = eepromLoadGame();
   indicateGame(game);
