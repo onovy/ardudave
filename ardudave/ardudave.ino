@@ -199,9 +199,6 @@ void loop() {
   unsigned long time = millis();
 
   // Auto sleep Arduino after specified time
-  if (time - lastAction > SLEEP_AFTER_MILIS) {
-    sleep();
-  }
   if (stateDigital[0] != digitalRead(PIN_BUTTON_W)) {
     stateDigital[0] = !stateDigital[0];
     lastAction = time;
@@ -239,6 +236,9 @@ void loop() {
   if (abs(diffL) > 5) {
     stateAnalog[1] = analogRead(PIN_POTEN_L);
     lastAction = time;
+  }
+  if (time - lastAction > SLEEP_AFTER_MILIS) {
+    sleep();
   }
   
   // Red and white button pressed together -> change game
