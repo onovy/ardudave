@@ -52,34 +52,42 @@ void fillLeds() {
   }
 }
 
+unsigned long melodySleep = 0;
+int toneFreq = 0;
 void game3(unsigned long time) {  
   if (melody) {
-    if (time - lastTone > toneLength) {
-      int speed = analogRead(PIN_POTEN_L) * 1.5;
-      int delayLength = toneLength;
+    if (melodySleep) {
+      if (time - lastTone > melodySleep) {
+        melodySleep = 0;
+        lastTone = time; 
 
-      unsigned int oneTone = pgm_read_word_near(melody + melodyPos);
-      toneLength = speed / TONE_LEN(oneTone);
-      int toneFreq = TONE_FREQ(oneTone);
-      lastTone = time;
-      
-      melodyPos++;
-      if (melodyPos > melodyLen) {
-        melody = 0;
-        resetLed();
-        noTone(PIN_PIEZO);
-        TCCR3A = (1 << WGM30);
-      } else {
-        reset();
-        noTone(PIN_PIEZO);
-        delay(delayLength / 3);
-        lastTone = _millis();
         if (toneFreq > 0) {
           tone(PIN_PIEZO, toneFreq);
 
           digitalWriteLed(leds[melodyPos], HIGH);
         }
+      } else {
+        powerSave();
       }
+    } else if (time - lastTone > toneLength) {
+      int speed = analogRead(PIN_POTEN_L) * 1.5;
+      int delayLength = toneLength / 3;
+
+      unsigned int oneTone = pgm_read_word_near(melody + melodyPos);
+      toneLength = speed / TONE_LEN(oneTone);
+      toneFreq = TONE_FREQ(oneTone);
+      lastTone = time;
+      
+      melodyPos++;
+      if (melodyPos > melodyLen) {
+        melody = 0;
+      } else {
+        melodySleep = delayLength + 1;
+      }
+      
+      resetLed();
+      noTone(PIN_PIEZO);
+      TCCR3A = (1 << WGM30);
     }
   } else {
     bool play = false;
