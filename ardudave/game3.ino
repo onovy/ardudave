@@ -54,7 +54,10 @@ void fillLeds() {
 
 unsigned long melodySleep = 0;
 int toneFreq = 0;
+bool blinkLed = true;
 void game3(unsigned long time) {  
+  blinkLed = digitalRead(PIN_SWITCH_Y) == LOW;
+
   if (melody) {
     if (melodySleep) {
       if (time - lastTone > melodySleep) {
@@ -64,7 +67,9 @@ void game3(unsigned long time) {
         if (toneFreq > 0) {
           tone(PIN_PIEZO, toneFreq);
 
-          digitalWriteLed(leds[melodyPos], HIGH);
+          if (blinkLed) {
+            digitalWriteLed(leds[melodyPos], HIGH);
+          }
         }
       } else {
         powerSave();
@@ -120,4 +125,3 @@ void game3(unsigned long time) {
     }
   }
 }
-
